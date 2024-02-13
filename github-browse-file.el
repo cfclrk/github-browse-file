@@ -178,6 +178,24 @@ region."
     (github-browse-file--browse-url (github-browse-file--anchor-lines))))
 
 ;;;###autoload
+(defun github-browse-file-copy-url (&optional force-master)
+  "Super hack, clean this up later."
+  (interactive "P")
+  (let* ((path (github-browse-file--repo-relative-path))
+        (github-browse-file--force-master force-master)
+        (anchor (github-browse-file--anchor-lines))
+        (url (concat "https://github.com/"
+                     (github-browse-file--relative-url) "/"
+                     (cond ((eq major-mode 'magit-status-mode) "tree")
+                           ((member major-mode github-browse-file--magit-commit-link-modes) "commit")
+                           (github-browse-file--view-blame "blame")
+                           (t "blob")) "/"
+                           (github-browse-file--current-rev) "/"
+                           (github-browse-file--repo-relative-path)
+                           (when anchor (concat "#" anchor)))))
+    (kill-new url)))
+
+;;;###autoload
 (defun github-browse-file-blame (&optional force-master)
   "Show the GitHub blame page for the current file. The URL for the webpage is
 added to the kill ring. With a prefix argument, \"master\" is used
