@@ -1,6 +1,4 @@
-;;; github-browse-file.el --- View the file you're editing on GitHub
-
-;; Copyright (C) 2013 Ozan Sener & Contributors
+;;; github-browse-file.el --- View the files in GitHub -*- lexical-binding: t; -*-
 
 ;; Author: Ozan Sener <ozan@ozansener.com>
 ;; Homepage: https://github.com/osener/github-browse-file
@@ -8,18 +6,11 @@
 ;; Keywords: convenience vc git github
 ;; Package-Requires: ((cl-lib "0.5"))
 
-;;; Installation:
-
-;; Available as a package in Marmalade at http://marmalade-repo.org/
-;; M-x package-install github-browse-file
-
 ;;; Commentary:
 
 ;; Call `github-browse-file' (for the git blob) or `github-browse-file-blame'
 ;; (for the git blame) to view current file on GitHub. With a prefix argument
 ;; (C-u), you can force them to use the "master" branch.
-
-;;; License:
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -42,16 +33,16 @@
 (require 'vc-git)
 
 (defgroup github-browse-file nil
-  "View the current file on GitHub"
+  "View the current file in GitHub."
   :group 'tools)
 
 (defcustom github-browse-file-visit-url t
-  "If non-nil, run `browse-url' after saving url to kill ring"
+  "If non-nil, run `browse-url' after saving url to kill ring."
   :group 'github-browse-file
   :type 'boolean)
 
 (defcustom github-browse-file-show-line-at-point nil
-  "If non-nil, link to the current line or active region"
+  "If non-nil, link to the current line or active region."
   :group 'github-browse-file
   :type 'boolean)
 
@@ -60,7 +51,7 @@
 This should only ever be `let'-bound, not set outright.")
 
 (defvar github-browse-file--force-master nil
-  "Whether to use \"master\" regardless of current branch
+  "Whether to use \"master\" regardless of current branch.
 This should only ever be `let'-bound, not set outright.")
 
 (defvar github-browse-file--magit-commit-link-modes
@@ -82,7 +73,7 @@ Error out if this isn't a GitHub repo."
     (and root (file-relative-name buffer-file-name root))))
 
 (defun github-browse-file--ahead-p ()
-  "Return non-nil if current git HEAD is ahead of origin/master"
+  "Return non-nil if current git HEAD is ahead of origin/master."
   (let ((rev (vc-git--run-command-string
               nil "rev-list" "--left-right" "origin/master...HEAD")))
     (and (> (length rev) 0)
@@ -130,7 +121,7 @@ the kill ring."
     (github-browse--save-and-view url)))
 
 (defun github-browse-file--anchor-lines ()
-  "Calculate anchor from lines in active region or current line
+  "Calculate anchor from lines in active region or current line.
 
 If `github-browse-file-show-line-at-point' is non-nil, then
 default to current line."
@@ -158,7 +149,7 @@ Otherwse, use `github-browse-file--current-rev'."
    (t (github-browse-file--current-rev))))
 
 (defun github-browse--save-and-view (url)
-  "Save url to kill ring and browse or show the url"
+  "Save url to kill ring and browse or show the url."
   (kill-new url)
   (if github-browse-file-visit-url
       (browse-url url)
